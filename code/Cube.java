@@ -17,6 +17,8 @@ public class Cube {
 				Face tmp = faces[indices[j]];
 				faces[indices[j]] = f;
 				faces[indices[j]].clock(ex[j]);
+				System.out.println("indices[" + j + "] is " + indices[j]);
+				System.out.println("ex[" + j + "] is " + ex[j]);
 				f = tmp;
 			}
 			faces[fc].clock(1);
@@ -31,29 +33,32 @@ public class Cube {
 		faces[5].setPos(Position.DOWN);
 	}
 	
+	//need to fix x rotations
 	public void x(int t) {
 		int indices[] = {0, 2, 3, 5};
 		int f = 1;
-		int extra[] = {0, 2, 2, 0};
+		//start with right-most index replacing left-most index in indices
+		int extra[] = {0, 0, 2, 2};
 		cube_rotate(f, extra, indices, t);
 	}
 	
 	public void xp(int t) {
 		int indices[] = {0, 5, 3, 2};
 		int f = 4;
-		int extra[] = {0, 2, 2, 0};
+		//start with right-most index replacing left-most index in indices
+		int extra[] = {0, 0, 2, 2};
 		cube_rotate(f, extra, indices, t);
 	}
 	
 	public void y(int t) {
-		int indices[] = {0, 1, 3, 4};
+		int indices[] = {0, 4, 3, 1};
 		int f = 2;
 		int extra[] = {0, 0, 0, 0};
 		cube_rotate(f, extra, indices, t);
 	}
 	
 	public void yp(int t) {
-		int indices[] = {0, 4, 3, 1};
+		int indices[] = {0, 1, 3, 4};
 		int f = 5;
 		int extra[] = {0, 0, 0, 0};
 		cube_rotate(f, extra, indices, t);
@@ -134,19 +139,31 @@ public class Cube {
 		}
 	}
 	
-	//fix F and B problems
 	public void F(int t) {
 		while (t > 0) {
-			yp(1);
-			z(1);
+			x(1);
 			up_clock(1);
-			z(3);
-			y(1);
+			xp(1);
 			t--;
 		}
 	}
 	
+	public void B(int t) {
+		while (t > 0) {
+			xp(1);
+			up_clock(1);
+			x(1);
+			t--;
+		}
+	}
 	
+	public void printOrient() {
+		for (int i = 0; i < faces.length; i++) {
+			String display = "Face " + faces[i].getCenter().toString() + " which is " + faces[i].getPos().toString() + " has orientation " + faces[i].getOrient();
+			System.out.println(display);
+		}
+		System.out.println();
+	}
 	
 	public void printCube() {
 		System.out.println("Printing cube as sideways t, with back on right side of the net");
