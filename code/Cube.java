@@ -11,6 +11,16 @@ public class Cube {
 	
 	//cube rotations
 	private void cube_rotate(int fc, int ex[], int indices[], int t) {
+		if (t < 0) {
+			for (int i = 0; i < ex.length; i++) {
+				ex[i] *= -1;
+			}
+			int temp = indices[3];
+			indices[3] = indices[1];
+			indices[1] = temp;
+			t *= -1;
+			fc = (fc + 3) % 6;
+		}
 		while (t > 0) {
 			Face f = faces[indices[3]];
 			for (int j = 0; j < indices.length; j++) {
@@ -42,24 +52,9 @@ public class Cube {
 		cube_rotate(f, extra, indices, t);
 	}
 	
-	public void xp(int t) {
-		int indices[] = {0, 5, 3, 2};
-		int f = 4;
-		//start with right-most index replacing left-most index in indices
-		int extra[] = {0, 0, 2, 2};
-		cube_rotate(f, extra, indices, t);
-	}
-	
 	public void y(int t) {
 		int indices[] = {0, 4, 3, 1};
 		int f = 2;
-		int extra[] = {0, 0, 0, 0};
-		cube_rotate(f, extra, indices, t);
-	}
-	
-	public void yp(int t) {
-		int indices[] = {0, 1, 3, 4};
-		int f = 5;
 		int extra[] = {0, 0, 0, 0};
 		cube_rotate(f, extra, indices, t);
 	}
@@ -71,91 +66,79 @@ public class Cube {
 		cube_rotate(f, extra, indices, t);
 	}
 	
-	public void zp(int t) {
-		int indices[] = {1, 2, 4, 5};
-		int f = 3;
-		int extra[] = {-1, -1, -1, -1};
-		cube_rotate(f, extra, indices, t);
-	}
-	
 	//face rotations
-	private void up_clock(int t) {
+	private void clock_rot(int t, char c, int p) { //c == 'n' gives U
+		boolean opp = false;
+		if (t < 0) {
+			opp = true;
+			t *= -1;
+			p *= -1;
+		}
 		while (t > 0) { //goes through up_clock t times
+			//do cube rotation
+			switch (c) {
+			case 'x':
+				x(p);
+				break;
+			case 'y':
+				y(p);
+				break;
+			case 'z':
+				z(p);
+				break;
+			}
+			//do rotation
 			int indices[] = {0, 4, 3, 1};
-			for (int i = 1; i < 4; i++) {
+			if (opp) { indices[1] = 1; indices[3] = 4;}
+			int i = 1;
+			if (opp) { i = 3; }
+			while (i <= 3 && i >= 1) {
 				int j = 0;
 				if (i == 3) { j = 3; }
 				if (i % 2 == 1) {
-					Color c = faces[indices[3]].getCorner(j);
+					Color clr = faces[indices[3]].getCorner(j);
 					for (int k = 0; k < indices.length; k++) {
 						Color temp = faces[indices[k]].getCorner(j);
-						faces[indices[k]].setCorner(j, c);
-						c = temp;
+						faces[indices[k]].setCorner(j, clr);
+						clr = temp;
 					}
 				}
 				else {
-					Color c = faces[indices[3]].getEdge(j);
+					Color clr = faces[indices[3]].getEdge(j);
 					for (int k = 0; k < indices.length; k++) {
 						Color temp = faces[indices[k]].getEdge(j);
-						faces[indices[k]].setEdge(j, c);
-						c = temp;
+						faces[indices[k]].setEdge(j, clr);
+						clr = temp;
 					}
 				}
+				if (opp) { i--; }
+				else { i++; }
 			}
-			faces[2].clock(1);
+			if (opp) {faces[2].clock(1);}
+			else { faces[2].clock(-1);}
+			//do inverse rotation
+			switch (c) {
+			case 'x':
+				x(-p);
+				break;
+			case 'y':
+				y(-p);
+				break;
+			case 'z':
+				z(-p);
+				break;
+			}
 			t--;
 		}
 	}
 	
-	public void U(int t) {
-		while (t > 0) {
-			up_clock(1);
-			t--;
-		}
-	}
-	public void R(int t) {
-		while (t > 0) {
-			zp(1);
-			up_clock(1);
-			z(1);
-			t--;
-		}
-	}
-	public void L(int t) {
-		while (t > 0) {
-			z(1);
-			up_clock(1);
-			zp(1);
-			t--;
-		}
-	}
-	
-	public void D(int t) {
-		while (t > 0) {
-			z(2);
-			up_clock(1);
-			z(2);
-			t--;
-		}
-	}
-	
-	public void F(int t) {
-		while (t > 0) {
-			x(1);
-			up_clock(1);
-			xp(1);
-			t--;
-		}
-	}
-	
-	public void B(int t) {
-		while (t > 0) {
-			xp(1);
-			up_clock(1);
-			x(1);
-			t--;
-		}
-	}
+	//each rotation works on it's own, but kind of dies when put together in a long string
+	public void up(int t) { clock_rot(t, 'n', 0); }
+	public void right(int t) { clock_rot(t, 'z', -1); }
+	public void left(int t) { clock_rot(t, 'z', 1); }
+	public void down(int t) { clock_rot(t, 'z', 2); }
+	public void front(int t) { clock_rot(t, 'x', 1); }
+	public void back(int t) { clock_rot(t, 'x', -1); }
 	
 	public void printOrient() {
 		for (int i = 0; i < faces.length; i++) {
