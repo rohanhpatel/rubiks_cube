@@ -1,9 +1,6 @@
 public class Face {
 	Color[][] colors = new Color[3][3];
-	//default constructor
-	public Face() {
-		
-	}
+	
 	//constructor with color input
 	public Face(Color c) {
 		for (int i = 0; i < 3; i++) {
@@ -13,5 +10,7 @@ public class Face {
 		}
 	}
 	
-	public Color getColor() { return colors[1][1]; } //returns the color of the center
+	public Color getColor() { //returns the color of the center
+		return colors[1][1];
+	} 
 }
