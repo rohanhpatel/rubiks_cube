@@ -52,6 +52,33 @@ public class CubeWrapper {
 		case 'z':
 			c.z(amt);
 			break;
+		case 'r':
+			c.little_r(amt);
+			break;
+		case 'l':
+			c.little_l(amt);
+			break;
+		case 'u':
+			c.little_u(amt);
+			break;
+		case 'd':
+			c.little_d(amt);
+			break;
+		case 'f':
+			c.little_f(amt);
+			break;
+		case 'b':
+			c.little_b(amt);
+			break;
+		case 'M':
+			c.middle(amt);
+			break;
+		case 'E':
+			c.equator(amt);
+			break;
+		case 'S':
+			c.standing(amt);
+			break;
 		}
 	}
 	

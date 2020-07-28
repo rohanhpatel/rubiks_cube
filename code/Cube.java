@@ -43,8 +43,7 @@ public class Cube {
 		faces[5].setPos(Position.DOWN);
 	}
 	
-	//need to fix x rotations
-	public void x(int t) {
+	public void x(int t) { //rotate whole cube on R
 		int indices[] = {0, 2, 3, 5};
 		int f = 1;
 		//start with right-most index replacing left-most index in indices
@@ -52,14 +51,14 @@ public class Cube {
 		cube_rotate(f, extra, indices, t);
 	}
 	
-	public void y(int t) {
+	public void y(int t) { //rotate whole cube on U
 		int indices[] = {0, 4, 3, 1};
 		int f = 2;
 		int extra[] = {0, 0, 0, 0};
 		cube_rotate(f, extra, indices, t);
 	}
 	
-	public void z(int t) {
+	public void z(int t) { //rotate whole cube on F
 		int indices[] = {1, 5, 4, 2};
 		int f = 0;
 		int extra[] = {1, 1, 1, 1};
@@ -131,6 +130,14 @@ public class Cube {
 		}
 	}
 	
+	
+	//r, u, b, l, f, and d
+	public void little_r(int t) { left(t); x(t); }
+	public void little_l(int t) { right(t); x(-t); }
+	public void little_u(int t) { down(t); y(t); }
+	public void little_d(int t) { up(t); y(-t); }
+	public void little_f(int t) { back(t); z(t); }
+	public void little_b(int t) { front(t); z(-t); }
 	//each rotation works on it's own, but kind of dies when put together in a long string
 	public void up(int t) { clock_rot(t, 'n', 0); }
 	public void right(int t) { clock_rot(t, 'z', -1); }
@@ -138,6 +145,10 @@ public class Cube {
 	public void down(int t) { clock_rot(t, 'z', 2); }
 	public void front(int t) { clock_rot(t, 'x', 1); }
 	public void back(int t) { clock_rot(t, 'x', -1); }
+	//middle slices, M(R), E(U), and S(F)
+	public void middle(int t) { little_l(t); left(-t); }
+	public void equator(int t) { little_d(t); down(-t); }
+	public void standing(int t) { little_f(t); front(-t); }
 	
 	public void printOrient() {
 		for (int i = 0; i < faces.length; i++) {
