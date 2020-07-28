@@ -27,8 +27,8 @@ public class Cube {
 				Face tmp = faces[indices[j]];
 				faces[indices[j]] = f;
 				faces[indices[j]].clock(ex[j]);
-				System.out.println("indices[" + j + "] is " + indices[j]);
-				System.out.println("ex[" + j + "] is " + ex[j]);
+//				System.out.println("indices[" + j + "] is " + indices[j]);
+//				System.out.println("ex[" + j + "] is " + ex[j]);
 				f = tmp;
 			}
 			faces[fc].clock(1);
@@ -72,7 +72,6 @@ public class Cube {
 		if (t < 0) {
 			opp = true;
 			t *= -1;
-			p *= -1;
 		}
 		while (t > 0) { //goes through up_clock t times
 			//do cube rotation
@@ -114,8 +113,8 @@ public class Cube {
 				if (opp) { i--; }
 				else { i++; }
 			}
-			if (opp) {faces[2].clock(1);}
-			else { faces[2].clock(-1);}
+			if (opp) {faces[2].clock(-1);}
+			else { faces[2].clock(1);}
 			//do inverse rotation
 			switch (c) {
 			case 'x':
@@ -167,6 +166,15 @@ public class Cube {
 			}
 		}
 		System.out.println();
+	}
+	
+	public void reset() {
+		faces[0] = new Face(Color.WHITE, Position.FRONT);
+		faces[1] = new Face(Color.RED, Position.RIGHT);
+		faces[2] = new Face(Color.BLUE, Position.UP);
+		faces[3] = new Face(Color.YELLOW, Position.BACK);
+		faces[4] = new Face(Color.ORANGE, Position.LEFT);
+		faces[5] = new Face(Color.GREEN, Position.DOWN);
 	}
 	
 }
