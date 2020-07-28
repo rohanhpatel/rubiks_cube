@@ -83,4 +83,6 @@ public class CubeWrapper {
 	}
 	
 	public void printCube() { c.printCube(); }
+	
+	public void reset() { c.reset(); }
 }

@@ -27,8 +27,6 @@ public class CubeMain {
 		CubeWrapper c = new CubeWrapper();
 		String cycle_edge = "M2 U' M U2 M' U' M2";
 		String rev_cycle_edge = "M2 U M U2 M' U M2";
-		String eq = "E";
-		String stand = "S";
 		c.run_alg(cycle_edge);
 		c.run_alg(rev_cycle_edge);
 		c.printCube();
