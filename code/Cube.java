@@ -88,30 +88,38 @@ public class Cube {
 			//do rotation
 			int indices[] = {0, 4, 3, 1};
 			if (opp) { indices[1] = 1; indices[3] = 4;}
-			int i = 1;
-			if (opp) { i = 3; }
-			while (i <= 3 && i >= 1) {
-				int j = 0;
-				if (i == 3) { j = 3; }
-				if (i % 2 == 1) {
-					Color clr = faces[indices[3]].getCorner(j);
-					for (int k = 0; k < indices.length; k++) {
-						Color temp = faces[indices[k]].getCorner(j);
-						faces[indices[k]].setCorner(j, clr);
-						clr = temp;
-					}
+			for (int i = 0; i < 3; i++) {
+				Color clr = faces[indices[3]].getPiece(0, i);
+				for (int j = 0; j < indices.length; j++) {
+					Color temp = faces[indices[j]].getPiece(0, i);
+					faces[indices[j]].setPiece(0, i, clr);
+					clr = temp;
 				}
-				else {
-					Color clr = faces[indices[3]].getEdge(j);
-					for (int k = 0; k < indices.length; k++) {
-						Color temp = faces[indices[k]].getEdge(j);
-						faces[indices[k]].setEdge(j, clr);
-						clr = temp;
-					}
-				}
-				if (opp) { i--; }
-				else { i++; }
 			}
+//			int i = 1;
+//			if (opp) { i = 3; }
+//			while (i <= 3 && i >= 1) {
+//				int j = 0;
+//				if (i == 3) { j = 3; }
+//				if (i % 2 == 1) {
+//					Color clr = faces[indices[3]].getCorner(j);
+//					for (int k = 0; k < indices.length; k++) {
+//						Color temp = faces[indices[k]].getCorner(j);
+//						faces[indices[k]].setCorner(j, clr);
+//						clr = temp;
+//					}
+//				}
+//				else {
+//					Color clr = faces[indices[3]].getEdge(j);
+//					for (int k = 0; k < indices.length; k++) {
+//						Color temp = faces[indices[k]].getEdge(j);
+//						faces[indices[k]].setEdge(j, clr);
+//						clr = temp;
+//					}
+//				}
+//				if (opp) { i--; }
+//				else { i++; }
+//			}
 			if (opp) {faces[2].clock(-1);}
 			else { faces[2].clock(1);}
 			//do inverse rotation
@@ -152,7 +160,7 @@ public class Cube {
 	
 	public void printOrient() {
 		for (int i = 0; i < faces.length; i++) {
-			String display = "Face " + faces[i].getCenter().toString() + " which is " + faces[i].getPos().toString() + " has orientation " + faces[i].getOrient();
+			String display = "Face " + faces[i].getPiece(1, 1) + " which is " + faces[i].getPos() + " has orientation " + faces[i].getOrient();
 			System.out.println(display);
 		}
 		System.out.println();
@@ -163,18 +171,9 @@ public class Cube {
 		System.out.println("All faces will be shown in this orientation from top left to bottom right");
 		System.out.println();
 		for (int i = 0; i < faces.length; i++) {
-			String display = "Displaying " + faces[i].getCenter().toString() + " which is " + faces[i].getPos().toString() + " with orientation " + faces[i].getOrient();
+			String display = "Displaying " + faces[i].getPiece(1, 1) + " which is " + faces[i].getPos() + " with orientation " + faces[i].getOrient();;
 			System.out.println(display);
-			for (int j = 0; j < 3; j++) {
-				String line = "";
-				for (int k = 0; k < 3; k++) {
-					line += faces[i].getPiece((j * 3) + k).toString();
-					if (k != 2) {
-						line += ", "; 
-					}
-				}
-				System.out.println(line);
-			}
+			faces[i].printFace();
 		}
 		System.out.println();
 	}

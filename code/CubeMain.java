@@ -25,15 +25,7 @@ public class CubeMain {
 	
 	public static void main(String[] args) {
 		CubeWrapper c = new CubeWrapper();
-		String cycle_edge = "M2 U' M U2 M' U' M2";
-		String rev_cycle_edge = "M2 U M U2 M' U M2";
-		c.run_alg(cycle_edge);
-		c.run_alg(rev_cycle_edge);
-		c.printCube();
-		c.run_alg("E");
-		c.printCube();
-		c.run_alg("E'");
-		c.run_alg("S");
+		c.random_scramble(10);
 		c.printCube();
 	}
 
