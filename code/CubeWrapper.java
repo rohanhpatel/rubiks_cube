@@ -1,4 +1,6 @@
 import java.util.Random;
+import javax.swing.*;
+import java.awt.*;
 
 public class CubeWrapper {
 	Cube c = new Cube();
@@ -8,12 +10,15 @@ public class CubeWrapper {
 		System.out.println();
 	}
 	
-	public void run_alg(String str) {
-		String[] steps = str.split(" ");
-		for (int i = 0; i < steps.length; i++) {
-			run_command(steps[i]);
+	public void run_alg(String str, boolean steps) {
+		String[] step_arr = str.split(" ");
+		for (int i = 0; i < step_arr.length; i++) {
+			run_command(step_arr[i]);
+			String inp = "Step " + i + " - " + step_arr[i];
+			if (steps) { dispCube(inp); } 
 		}
 	}
+	
 	
 	private void run_command(String str) {
 		int amt = 0;
@@ -28,60 +33,95 @@ public class CubeWrapper {
 		}
 		switch (str.charAt(0)) {
 		case 'R':
-			c.right(amt);
+			c.norm_rot(amt, Position.RIGHT);
 			break;
 		case 'L':
-			c.left(amt);
+			c.norm_rot(amt, Position.LEFT);
 			break;
 		case 'U':
-			c.up(amt);
+			c.norm_rot(amt, Position.UP);
 			break;
 		case 'B':
-			c.back(amt);
+			c.norm_rot(amt, Position.BACK);
 			break;
 		case 'D':
-			c.down(amt);
+			c.norm_rot(amt, Position.DOWN);
 			break;
 		case 'F':
-			c.front(amt);
+			c.norm_rot(amt, Position.FRONT);
 			break;
 		case 'x':
-			c.x(amt);
+			c.norm_rot(amt, Position.RIGHT);
+			c.norm_rot(-amt, Position.LEFT);
+			c.mid_rot(amt, Position.RIGHT, Position.LEFT);
 			break;
 		case 'y':
-			c.y(amt);
+			c.norm_rot(amt, Position.UP);
+			c.norm_rot(-amt, Position.DOWN);
+			c.mid_rot(amt, Position.UP, Position.DOWN);
 			break;
 		case 'z':
-			c.z(amt);
+			c.norm_rot(amt, Position.FRONT);
+			c.norm_rot(-amt, Position.BACK);
+			c.mid_rot(amt, Position.FRONT, Position.BACK);
 			break;
 		case 'r':
-			c.little_r(amt);
+			c.norm_rot(amt, Position.RIGHT);
+			c.mid_rot(amt, Position.RIGHT, Position.LEFT);
 			break;
 		case 'l':
-			c.little_l(amt);
+			c.norm_rot(amt, Position.LEFT);
+			c.mid_rot(amt, Position.LEFT, Position.RIGHT);
 			break;
 		case 'u':
-			c.little_u(amt);
+			c.norm_rot(amt, Position.UP);
+			c.mid_rot(amt, Position.UP, Position.DOWN);
 			break;
 		case 'd':
-			c.little_d(amt);
+			c.norm_rot(amt, Position.DOWN);
+			c.mid_rot(amt, Position.DOWN, Position.UP);
 			break;
 		case 'f':
-			c.little_f(amt);
+			c.norm_rot(amt, Position.FRONT);
+			c.mid_rot(amt, Position.FRONT, Position.BACK);
 			break;
 		case 'b':
-			c.little_b(amt);
+			c.norm_rot(amt, Position.BACK);
+			c.mid_rot(amt, Position.BACK, Position.FRONT);
 			break;
 		case 'M':
-			c.middle(amt);
+			c.mid_rot(amt, Position.LEFT, Position.RIGHT);
 			break;
 		case 'E':
-			c.equator(amt);
+			c.mid_rot(amt, Position.DOWN, Position.UP);
 			break;
 		case 'S':
-			c.standing(amt);
+			c.mid_rot(amt, Position.FRONT, Position.BACK);
 			break;
 		}
+	}
+	
+	public void dispCube(String str) {
+		if (str == null) { str = "Rubik's Cube"; }
+		JFrame frame = new JFrame(str);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(400, 400);
+		frame.setLayout(new GridBagLayout());
+		GridBagConstraints con = new GridBagConstraints();
+		con.ipadx = 10;
+		con.ipady = 10;
+		Face[] faces = c.getFaces();
+//		System.out.println(faces.length);
+		for (int i = 0; i < faces.length; i++) {
+//			System.out.println("before: " + frame.getContentPane().getComponents().length);
+			JLabel new_face = new JLabel(faces[i].getLabel());
+			int[] cnates = faces[i].getPos().coords();
+			con.gridx = cnates[0];
+			con.gridy = cnates[1];
+			frame.getContentPane().add(new_face, con);
+//			System.out.println("after: " + frame.getContentPane().getComponents().length);
+		}
+		frame.setVisible(true);
 	}
 	
 	public void printCube() { c.printCube(); }
